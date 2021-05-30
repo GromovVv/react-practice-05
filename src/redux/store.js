@@ -1,19 +1,74 @@
-import { createStore, combineReducers } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+/* eslint-disable no-unused-vars */
+// import { combineReducers } from 'redux';
+// eslint-disable-next-line no-unused-vars
+// import { composeWithDevTools } from 'redux-devtools-extension';
+import {
+  configureStore,
+  getDefaultMiddleware,
+  // combineReducers,
+} from '@reduxjs/toolkit';
+import logger from 'redux-logger';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
-import todosReducer from '../redux/todos/todos-reducer'
-import counterReducer from "./counter/counter-reducer"
+import todosReducer from '../redux/todos/todos-reducer';
+import counterReducer from './counter/counter-reducer';
 
-const rootReducer = combineReducers({
-  counter: counterReducer,
-  todos: todosReducer,
+// console.log(getDefaultMiddleware());
+
+const middleware = [
+  ...getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+  }),
+  logger,
+];
+
+// const rootReducer = combineReducers({
+//   counter: persistReducer(persistConfig, counterReducer),
+//   todos: persistReducer(persistConfig, todosReducer),
+// });
+const counterPersistConfig = {
+  key: 'Counter',
+  storage,
+  blacklist: ['filter'],
+};
+const todosPersistConfig = {
+  key: 'Todos',
+  storage,
+};
+
+
+const store = configureStore({
+  reducer: {
+    counter: persistReducer(counterPersistConfig, counterReducer),
+    todos: persistReducer(todosPersistConfig, todosReducer),
+  },
+  middleware,
+  devTools: process.env.NODE_ENV === 'development',
 });
 
-const store = createStore(rootReducer, composeWithDevTools());
+const persistor = persistStore(store);
 
-export default store;
+// eslint-disable-next-line import/no-anonymous-default-export
+export default { store, persistor };
 
+// const rootReducer = combineReducers({
+//   counter: counterReducer,
+//   todos: todosReducer,
+// });
 
+// const store = createStore(rootReducer, composeWithDevTools());
 
 // const initialState = {
 //   counter: {

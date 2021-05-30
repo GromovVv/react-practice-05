@@ -33,7 +33,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch => ({
   onDeleteTodo: id => dispatch(todosActions.deleteTodo(id)),
-  onToggleCompleted: () => null,
+  onToggleCompleted: id => dispatch(todosActions.toggleCompleted(id)) ,
 })
 
 

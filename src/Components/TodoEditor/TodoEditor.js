@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
-import todosActions from '../../redux/todos/todos-actions'
+import todosActions from '../../redux/todos/todos-actions';
 import './TodoEditor.scss';
 
 class TodoEditor extends Component {
@@ -16,9 +16,14 @@ class TodoEditor extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    this.props.onSubmit(this.state.message);
+    if (this.state.message.trim() !== '') {
+      this.props.onSubmit(this.state.message);
+      this.props.onSave();
+      this.setState({ message: '' });
+      return;
+    }
+    alert('Dont play with me biyatch!')
 
-    this.setState({ message: '' });
   };
 
   render() {
@@ -38,7 +43,7 @@ class TodoEditor extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  onSubmit: (text) => dispatch(todosActions.addTodo(text))
+  onSubmit: text => dispatch(todosActions.addTodo(text)),
 });
 
 export default connect(null, mapDispatchToProps)(TodoEditor);

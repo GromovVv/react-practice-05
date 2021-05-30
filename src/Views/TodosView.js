@@ -8,6 +8,7 @@ import Stats from '../Components/Stats';
 import Modal from '../Components/Modal';
 import IconButton from '../Components/IconButton';
 import { ReactComponent as AddIcon } from '../icons/add.svg';
+// eslint-disable-next-line no-unused-vars
 import todosApi from '../services/todos-api';
 
 const barStyles = {
@@ -59,19 +60,19 @@ class TodosView extends Component {
   //   });
   // };
 
-  toggleCompleted = todoId => {
-    const todo = this.state.todos.find(({ id }) => id === todoId);
-    const { completed } = todo;
-    const update = { completed: !completed };
+  // toggleCompleted = todoId => {
+  //   const todo = this.state.todos.find(({ id }) => id === todoId);
+  //   const { completed } = todo;
+  //   const update = { completed: !completed };
 
-    todosApi.updateTodo(todoId, update).then(updatedTodo => {
-      this.setState(({ todos }) => ({
-        todos: todos.map(todo =>
-          todo.id === updatedTodo.id ? updatedTodo : todo,
-        ),
-      }));
-    });
-  };
+  //   todosApi.updateTodo(todoId, update).then(updatedTodo => {
+  //     this.setState(({ todos }) => ({
+  //       todos: todos.map(todo =>
+  //         todo.id === updatedTodo.id ? updatedTodo : todo,
+  //       ),
+  //     }));
+  //   });
+  // };
 
   // changeFilter = e => {
   //   this.setState({ filter: e.currentTarget.value });
@@ -86,14 +87,14 @@ class TodosView extends Component {
   //   );
   // };
 
-  calculateCompletedTodos = () => {
-    const { todos } = this.state;
+  // calculateCompletedTodos = () => {
+  //   const { todos } = this.state;
 
-    return todos.reduce(
-      (total, todo) => (todo.completed ? total + 1 : total),
-      0,
-    );
-  };
+  //   return todos.reduce(
+  //     (total, todo) => (todo.completed ? total + 1 : total),
+  //     0,
+  //   );
+  // };
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({
@@ -111,7 +112,7 @@ class TodosView extends Component {
       <Container>
         <div style={barStyles}>
           <Filter />
-          {/* <Stats total={totalTodoCount} completed={completedTodoCount} /> */}
+          <Stats />
           <IconButton onClick={this.toggleModal} aria-label="Добавить todo">
             <AddIcon width="40" height="40" fill="#fff" />
           </IconButton>
@@ -121,7 +122,7 @@ class TodosView extends Component {
 
         {showModal && (
           <Modal onClose={this.toggleModal}>
-            <TodoEditor />
+            <TodoEditor onSave={this.toggleModal}/>
           </Modal>
         )}
       </Container>
